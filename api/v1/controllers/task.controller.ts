@@ -112,6 +112,11 @@ export const changeStatus = async (req: Request, res: Response) => {
   }
 };
 
+enum changeMultiTask {
+  STATUS = "status",
+  DELETE = "delete",
+}
+
 //[PATCH] /api/v1/tasks/change-multi
 export const changeMulti = async (req: Request, res: Response) => {
   try {
@@ -119,13 +124,8 @@ export const changeMulti = async (req: Request, res: Response) => {
     const key: string = req.body.key;
     const value: string = req.body.value;
 
-    enum changeMulti {
-      status = "status",
-      delete = "delete",
-    }
-
     switch (key) {
-      case changeMulti.status:
+      case changeMultiTask.STATUS:
         await Task.updateMany({ _id: { $in: ids } }, { status: value });
         res.json({
           code: 200,
@@ -133,7 +133,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         });
         break;
 
-      case changeMulti.delete:
+      case changeMultiTask.DELETE:
         await Task.updateMany(
           { _id: { $in: ids } },
           { deleted: true, deletedAt: new Date() },
@@ -170,8 +170,10 @@ export const create = async (req: Request, res: Response) => {
       data: data,
     });
   } catch (error) {
-    code: 400;
-    message: "Có lỗi xảy ra";
+    res.json({
+      code: 400,
+      message: "Có lỗi xảy ra",
+    });
   }
 };
 
@@ -197,6 +199,7 @@ export const edit = async (req: Request, res: Response) => {
   }
 };
 
+//[DELETE] /api/v1/tasks/delete/:id
 export const deleteTask = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
