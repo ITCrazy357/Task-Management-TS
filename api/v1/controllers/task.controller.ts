@@ -111,3 +111,50 @@ export const changeStatus = async (req: Request, res: Response) => {
     });
   }
 };
+
+//[PATCH] /api/v1/tasks/change-multi
+export const changeMulti = async (req: Request, res: Response) => {
+  try {
+    const ids: string[] = req.body.ids;
+    const key: string = req.body.key;
+    const value: string = req.body.value;
+
+    enum changeMulti {
+      status = "status",
+      delete = "delete",
+    }
+
+    switch (key) {
+      case changeMulti.status:
+        await Task.updateMany({ _id: { $in: ids } }, { status: value });
+        res.json({
+          code: 200,
+          message: "Cập nhật trạng thái thành công",
+        });
+        break;
+
+      case changeMulti.delete:
+        await Task.updateMany(
+          { _id: { $in: ids } },
+          { deleted: true, deletedAt: new Date() },
+        );
+        res.json({
+          code: 200,
+          message: "Xóa công việc thành công",
+        });
+        break;
+
+      default:
+        res.json({
+          code: 400,
+          message: "Không tồn tại trường cần cập nhật",
+        });
+        break;
+    }
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Có lỗi xảy ra",
+    });
+  }
+};
