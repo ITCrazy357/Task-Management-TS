@@ -6,6 +6,13 @@ import md5 from "md5";
 //[POST] /api/v1/users/register
 export const register = async (req: Request, res: Response) => {
   try {
+    if (!req.body || !req.body.email || !req.body.password) {
+      return res.json({
+        code: 400,
+        message: "Vui lòng nhập đầy đủ email và mật khẩu",
+      });
+    }
+
     req.body.password = md5(req.body.password);
     const existEmail = await User.findOne({
       email: req.body.email,
@@ -43,6 +50,13 @@ export const register = async (req: Request, res: Response) => {
 //[POST] /api/v1/users/login
 export const login = async (req: Request, res: Response) => {
   try {
+    if (!req.body || !req.body.email || !req.body.password) {
+      return res.json({
+        code: 400,
+        message: "Vui lòng nhập đầy đủ email và mật khẩu",
+      });
+    }
+
     const email = req.body.email;
     const password = md5(req.body.password);
 

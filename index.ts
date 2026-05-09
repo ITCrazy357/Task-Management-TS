@@ -14,6 +14,7 @@ const port: number | string = process.env.PORT || 3000;
 
 // Middleware đọc JSON
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(cookieParser());
 

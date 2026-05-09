@@ -18,6 +18,12 @@ const generate_1 = __importDefault(require("../../../helpers/generate"));
 const md5_1 = __importDefault(require("md5"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.body || !req.body.email || !req.body.password) {
+            return res.json({
+                code: 400,
+                message: "Vui lòng nhập đầy đủ email và mật khẩu",
+            });
+        }
         req.body.password = (0, md5_1.default)(req.body.password);
         const existEmail = yield user_model_1.default.findOne({
             email: req.body.email,
@@ -54,6 +60,12 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.body || !req.body.email || !req.body.password) {
+            return res.json({
+                code: 400,
+                message: "Vui lòng nhập đầy đủ email và mật khẩu",
+            });
+        }
         const email = req.body.email;
         const password = (0, md5_1.default)(req.body.password);
         const user = yield user_model_1.default.findOne({
