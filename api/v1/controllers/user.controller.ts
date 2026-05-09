@@ -78,3 +78,19 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ code: 500, message: "Lỗi server" });
   }
 };
+
+//[GET] /api/v1/users/detail
+export const detail = async (req: Request, res: Response) => {
+  try {
+    res.json({
+      code: 200,
+      message: "Lấy thông tin người dùng thành công",
+      info: req.user,
+    });
+  } catch (error) {
+    res.json({
+      code: 500,
+      message: "Lỗi server",
+    });
+  }
+};
